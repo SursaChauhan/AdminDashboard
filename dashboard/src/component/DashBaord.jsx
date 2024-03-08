@@ -37,6 +37,7 @@ export default function  Dashboard (){
     const[editopen,setEditOpen] =useState(false);
     const [productid,setProductId] =useState("");
     const [currentPage, setCurrentPage] = useState(1);
+    const [pages,setPages] =useState(0);
 
     const [age, setAge] = useState('');
     const [sortOrder, setSortOrder] = useState('');
@@ -86,6 +87,7 @@ export default function  Dashboard (){
 
     const handlegetProduct =async()=>{
          const   token=  localStorage.getItem('usertoken')
+         const limit = 2; 
         //     console.log(product);
             try {
                 const config = {
@@ -93,10 +95,11 @@ export default function  Dashboard (){
                     Authorization: `Bearer ${token}`,
                   },
                 };
-                const data= await axios.get(`http://localhost:7100/api/products?page=${currentPage}`);     
+                const data= await axios.get(`http://localhost:7100/api/products?page=${currentPage}&limit=${limit}`);     
                       console.log(data);
                     //   products.push(data);
                     setProducts(data.data.products);
+                    setPages(data.data.pages);
               } catch (error) {
                
                 console.log(error.message);
@@ -288,7 +291,7 @@ handlegetProduct(currentPage);
       <div style={{display:'flex',justifyContent:'center',alignItems:"center",marginTop:"3%"}}>
       <Stack spacing={2}>
       
-      <Pagination count={10} variant="outlined" shape="rounded" page={currentPage} onChange={handlePageChange}/>
+      <Pagination count={pages} variant="outlined" shape="rounded" page={currentPage} onChange={handlePageChange}/>
     </Stack>
       </div>
 
