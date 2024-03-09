@@ -85,6 +85,8 @@ export default function  Dashboard (){
           setOpen(!true);
     }
 
+//strike checking
+
     const handlegetProduct =async()=>{
          const   token=  localStorage.getItem('usertoken')
          const limit = 2; 
