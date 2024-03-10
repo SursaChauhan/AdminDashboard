@@ -213,7 +213,7 @@ handlegetProduct(currentPage);
 
     return (
     <>
-        {/* <Typography sx={{mb:1}}  variant="h4"/> */}
+       
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",margin:"auto"}}>
 
         <Button startIcon={<AddIcon/>} variant="contained" onClick={handleAddProduct}>Add Product</Button>
@@ -237,9 +237,6 @@ handlegetProduct(currentPage);
 
         </div>
      
-
-
-
         <TableContainer>
 <Table>
 <TableHead>

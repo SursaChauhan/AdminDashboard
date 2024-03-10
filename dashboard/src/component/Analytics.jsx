@@ -5,6 +5,9 @@ import axios from 'axios';
 
 const Analytics = () => {
   const [data,setData] =useState([]);
+  const currentPage =1;
+const limit =5;
+
   const chartdata = {
     labels: data.map((product)=>
 product.name
@@ -37,7 +40,7 @@ product.name
 
   const fetchdata=async()=>{
     try{
-const res =await axios.get('http://localhost:7100/api/products');
+const res =await axios.get(`http://localhost:7100/api/products?page=${currentPage}&limit=${limit}`);
 const data =res.data;
 console.log(data);
 setData(data.products);

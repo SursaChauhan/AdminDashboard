@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import SearchBar from '@mkyy/mui-search-bar';
+import axios from 'axios';
 
 
 const Search = () => {
   const [textFieldValue,setTextFieldValue] =useState(null);
+  const limit =2;
 
-  const handleSearch = labelOptionValue => {
+  const handleSearch =async (labelOptionValue) => {
+    const searchdata =await axios.get(`http://localhost:7100/api/products?query=${textFieldValue}&limit=${limit}`);
+    console.log("searchdata",searchdata)
     //...
-    console.log(labelOptionValue);
+    console.log(labelOptionValue,textFieldValue);
+    
   };
   return (
     <div>  <SearchBar
