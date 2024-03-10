@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import SearchBar from '@mkyy/mui-search-bar';
 import axios from 'axios';
+import Dashboard from '../DashBaord';
 
 
 const Search = () => {
   const [textFieldValue,setTextFieldValue] =useState(null);
   const limit =2;
 
-  const handleSearch =async (labelOptionValue) => {
+  const handleSearch =async () => {
+    
     const searchdata =await axios.get(`http://localhost:7100/api/products?query=${textFieldValue}&limit=${limit}`);
-    console.log("searchdata",searchdata)
+    console.log("searchdata",textFieldValue,searchdata);
+   
     //...
-    console.log(labelOptionValue,textFieldValue);
+    
     
   };
   return (
@@ -24,7 +27,9 @@ const Search = () => {
       color: 'black', // Change text color
       borderRadius:"23px"
     }}
-  /></div>
+  />
+  
+  </div>
   )
 }
 

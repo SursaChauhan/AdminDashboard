@@ -123,7 +123,7 @@ export default function MiniDrawer() {
       case 'Trash':
         return <div>Trash Component</div>;
       default:
-        return null;
+        return <DashBaord/>;
     }
   };
 
