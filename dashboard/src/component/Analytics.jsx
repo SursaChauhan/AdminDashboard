@@ -9,16 +9,16 @@ const Analytics = () => {
 const limit =5;
 
   const chartdata = {
-    labels: data.map((product)=>
-product.name
+    labels: data.map((user)=>
+user.sector
     ),
     datasets: [
       {
-        label: "Revenue",
-        data: data.map((product)=>
-        product.price
+        label: "Intensity",
+        data: data.map((user)=>
+        user.intensity
             ),
-        backgroundColor: ['skyblue', 'black', 'green'
+        backgroundColor: [ 'blue', 'green'
         ],
         borderColor: [
           'green',
@@ -26,8 +26,10 @@ product.name
         borderWidth: 2
       },
       {
-        label: "Loss",
-        data: [110, 230, 50, 90, 60],
+        label: "LikelyHood",
+        data: data.map((user)=>
+          user.likelihood
+              ),
         backgroundColor: ['orange'],
         borderColor: [
           'red',
@@ -40,10 +42,14 @@ product.name
 
   const fetchdata=async()=>{
     try{
-const res =await axios.get(`http://localhost:7100/api/products?page=${currentPage}&limit=${limit}`);
-const data =res.data;
-console.log(data);
-setData(data.products);
+      const res = await axios.get(`https://backend-mongo-3.onrender.com/api/users`);
+      const responseData = res.data; // Assuming responseData is an object or array returned by your API
+
+      // Example: Destructuring data from the response
+      const { region, country, source } = responseData;
+
+      // Example: Setting data in state
+      setData(responseData);
     }catch(err){
 console.log(err);
     }
@@ -58,13 +64,13 @@ fetchdata();
     <div id='analytics'>
 
 
-      <div id='bar' style={{  backgroundColor: "black",maxHeight:'300px' }}>
+      <div id='bar' style={{  backgroundColor: "black",maxHeight:'300px' ,border:'1px solid black'}}>
         <Bar data={chartdata} style={{width:"100%",padding:'1%'}} />
       </div>
 
 <div id='second' style={{display:'flex',marginTop:"3%",gap:"3%",justifyContent:'center',alignItems:"center"}}>
 
-<div id='line' style={{ backgroundColor: "black",width:"58%"}}>
+<div id='line' style={{ backgroundColor: "black",width:"58%",border:'1px solid black'}}>
         <Line data={chartdata}  />
       </div>
 

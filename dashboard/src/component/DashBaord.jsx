@@ -32,10 +32,10 @@ import Stack from '@mui/material/Stack';
 
 
 export default function  Dashboard (){
-    const [products,setProducts]=useState([]);
+    const [users,setusers]=useState([]);
     const[open,setOpen] =useState(false);
     const[editopen,setEditOpen] =useState(false);
-    const [productid,setProductId] =useState("");
+    const [userid,setUserId] =useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [pages,setPages] =useState(0);
 
@@ -45,39 +45,40 @@ export default function  Dashboard (){
 
     const [initialValues,setInitialValues] =useState({
         _id:'',
-        name: "",
-        gender:"",
-        category:"&living",
-        price:"",
-        description:"",
+        title:"",
+        sector: "sector",
+        topic:"topic",
+        region:"region",
+        pestle:"",
+        
     })
     const handleAddProduct =()=>{
         setInitialValues({
-        name: "",
-        gender:"",
-        category:"",
-        price:"",
-        description:"", 
+          title:"",
+          sector: "",
+          topic:"",
+          region:"",
+          pestle:"",
         })
         setOpen(true);
 
     };
-    const handlePostProduct =async(product)=>{
+    const handlePostUser =async(user)=>{
     const   token=  localStorage.getItem('usertoken')
-        console.log(product);
+        console.log(user);
         try {
             const config = {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
             };
-            const data= await axios.post('http://localhost:7100/api/products', product,config, {
+            const data= await axios.post('https://backend-mongo-3.onrender.com/api/users', user,config, {
                 headers: {
                   'Content-Type': 'application/json'
                 }
               })        
                   console.log(data);
-                  handlegetProduct();
+                  handlegetUser();
           } catch (error) {
            
             console.log(error.message);
@@ -87,9 +88,9 @@ export default function  Dashboard (){
 
 //strike checking
 
-    const handlegetProduct =async()=>{
+    const handlegetUser =async()=>{
          const   token=  localStorage.getItem('usertoken')
-         const limit = 2; 
+         const limit = 8; 
         //     console.log(product);
             try {
                 const config = {
@@ -97,36 +98,38 @@ export default function  Dashboard (){
                     Authorization: `Bearer ${token}`,
                   },
                 };
-                const data= await axios.get(`http://localhost:7100/api/products?page=${currentPage}&limit=${limit}`);     
-                      console.log(data);
-                    //   products.push(data);
-                    setProducts(data.data.products);
-                    setPages(data.data.pages);
+                const data= await axios.get(`https://backend-mongo-3.onrender.com/api/users?${pages}&limit=8`);     
+                      console.log(data.data);
+                    const dataPages = Math.ceil(data.data.length /limit);
+                    console.log(dataPages);
+                    setusers(data.data);
+                    setPages(dataPages);
+                    
               } catch (error) {
                
                 console.log(error.message);
               }
         }
-    const handleProductEdit =async(product)=>{
-        const id =product._id;
+    const handleUserEdit =async(user)=>{
+        const id =user._id;
         setInitialValues({
-        name: product.name,
-        gender:product.gender,
-        category:product.category,
-        price:product.price,
-        description:product.description, 
+          title:user.title,
+          sector: user.sector,
+          topic:user.topic,
+          region:user.region,
+          pestle:user.pestle, 
         })
         setEditOpen(true);
-        setProductId(id);
+        setUserId(id);
 
     };
     
     
      
-    const handleProductUpdate=async(product)=>{
-        console.log('Update product',product);
+    const handleUserUpdate=async(user)=>{
+        console.log('Update User',user);
        
-        const id = productid;
+        const id = userid;
 
         const   token=  localStorage.getItem('usertoken')
             console.log(id,token);
@@ -136,16 +139,16 @@ export default function  Dashboard (){
                     Authorization: `Bearer ${token}`,
                   },
                 };
-                const data= await axios.patch(`http://localhost:7100/api/products/${id}`,{
-                    name: product.name,
-            gender: product.gender,
-            category: product.category,
-            price: product.price,
-            description: product.description, 
+                const data= await axios.patch(`https://backend-mongo-3.onrender.com/api/users/${id}`,{
+                  title:user.title,
+                  sector: user.sector,
+                  topic:user.topic,
+                  region:user.region,
+                  pestle:user.pestle, 
                 });     
                       console.log("data from update",data);
-                      handlegetProduct();
-                    // setProducts(data.data.products);
+                      handlegetUser();
+                    // setusers(data.data.users);
               } catch (error) {
                
                 console.log(error.message);
@@ -153,9 +156,9 @@ export default function  Dashboard (){
               setEditOpen(!editopen);
 
     };
-    const handleDeleteProduct =async(product)=>{
+    const handleDeleteUser =async(user)=>{
       
-        const id =product._id;
+        const id =user._id;
         const   token=  localStorage.getItem('usertoken')
         //     console.log(product);
             try {
@@ -164,16 +167,16 @@ export default function  Dashboard (){
                     Authorization: `Bearer ${token}`,
                   },
                 };
-                const data= await axios.delete(`http://localhost:7100/api/products/${id}`,config);     
+                const data= await axios.delete(`https://backend-mongo-3.onrender.com/api/users/${id}`,config);     
                       console.log("Delete product",data);
-                      handlegetProduct();
-                    //   products.push(data);
-                    // setProducts(data.data.products);
+                      handlegetUser();
+                    //   users.push(data);
+                    // setusers(data.data.users);
               } catch (error) {
                
                 console.log(error.message);
               }
-              console.log('Delete product',product);
+              console.log('Delete product',user);
 
     }
 
@@ -185,7 +188,7 @@ export default function  Dashboard (){
     const handleChange = (event) => {
       setSortOrder(event.target.value);
 
-      const newData = [...products];
+      const newData = [...users];
 
       // Perform sorting based on the selected sort order
       if (event.target.value === 'asc') {
@@ -195,7 +198,7 @@ export default function  Dashboard (){
       }
   
       // Update the state with the sorted data
-      setProducts(newData);
+      setusers(newData);
     };
 
     const handlePageChange =(event,page)=>{
@@ -204,11 +207,11 @@ setCurrentPage(page);
 
 
     useEffect(() => {
-handlegetProduct(currentPage);
+handlegetUser(currentPage);
       }, []);
 
   useEffect(() => {
-handlegetProduct(currentPage);
+handlegetUser(currentPage);
       }, [currentPage]);
 
     return (
@@ -216,7 +219,7 @@ handlegetProduct(currentPage);
        
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",margin:"auto"}}>
 
-        <Button startIcon={<AddIcon/>} variant="contained" onClick={handleAddProduct}>Add Product</Button>
+        <Button startIcon={<AddIcon/>} variant="contained" onClick={handleAddProduct}>Add DATA</Button>
      
      
      <Box sx={{ minWidth: 150 }}>
@@ -242,19 +245,19 @@ handlegetProduct(currentPage);
 <TableHead>
     <TableRow>
         <TableCell>
-            Product
+            Title
         </TableCell>
         <TableCell>
-            Gender
+            Sector
         </TableCell>
         <TableCell>
-            Category
+            Topic
         </TableCell>
         <TableCell>
-            Price
+            Region
         </TableCell>
         <TableCell>
-            Description
+            Pestle
         </TableCell>
         <TableCell>
             Action
@@ -263,18 +266,18 @@ handlegetProduct(currentPage);
     </TableRow>
 </TableHead>
 <TableBody>
-    {products.map(p=>
+    {users.map(p=>
         <TableRow>
-<TableCell>{p.name}</TableCell>
-<TableCell>{p.gender}</TableCell>
-<TableCell>{p.category}</TableCell>
-<TableCell>{p.price}</TableCell>
-<TableCell>{p.description}</TableCell>
+<TableCell>{p.title}</TableCell>
+<TableCell>{p.sector}</TableCell>
+<TableCell>{p.topic}</TableCell>
+<TableCell>{p.region}</TableCell>
+<TableCell>{p.pestle}</TableCell>
 <TableCell>
-    <IconButton onClick={()=> handleProductEdit(p)}>
+    <IconButton onClick={()=> handleUserEdit(p)}>
         {<DriveFileRenameOutlineIcon/>}
     </IconButton>
-    <IconButton onClick={()=> handleDeleteProduct(p)}>
+    <IconButton onClick={()=> handleDeleteUser(p)}>
         {<DeleteForeverIcon sx={{color:Colors.danger}}/>}
     </IconButton>
 </TableCell>
@@ -301,7 +304,7 @@ handlegetProduct(currentPage);
             <DialogTitle>
 {"ADD PRODUCT"}
             </DialogTitle>
-            <Formik initialValues={initialValues} validationSchema={""} onSubmit={handlePostProduct}>
+            <Formik initialValues={initialValues} validationSchema={""} onSubmit={handlePostUser}>
                 {({dirty, isValid, getFieldProps})=>(
                     
                 
@@ -334,7 +337,7 @@ handlegetProduct(currentPage);
     {getFieldProps('_id').value !== -1?
 (<Button disabled={!dirty || !isValid}  type="submit" variant="contained" color="primary" >Save/Edit</Button>
 )           :
-(<Button disabled={!dirty || !isValid} onClick={handlePostProduct} type="submit" variant="contained" color="primary" >Save</Button>
+(<Button disabled={!dirty || !isValid} onClick={handlePostUser} type="submit" variant="contained" color="primary" >Save</Button>
 )           }
 <Button onClick={()=>setOpen(false)} color="primary" >Cancel</Button>
 
@@ -350,7 +353,7 @@ handlegetProduct(currentPage);
             <DialogTitle>
 {"EDIT PRODUCT"}
             </DialogTitle>
-            <Formik initialValues={initialValues} validationSchema={""} onSubmit={handleProductUpdate}>
+            <Formik initialValues={initialValues} validationSchema={""} onSubmit={handleUserUpdate}>
                 {({dirty, isValid, getFieldProps})=>(
 
                 
@@ -383,7 +386,7 @@ handlegetProduct(currentPage);
     {getFieldProps('_id').value !== -1?
 (<Button disabled={!dirty || !isValid}  type="submit" variant="contained" color="primary" >Save/Edit</Button>
 )           :
-(<Button disabled={!dirty || !isValid} onClick={handlePostProduct} type="submit" variant="contained" color="primary" >Save</Button>
+(<Button disabled={!dirty || !isValid} onClick={handlePostUser} type="submit" variant="contained" color="primary" >Save</Button>
 )           }
 <Button onClick={()=>setEditOpen(false)} color="primary" >Cancel</Button>
 

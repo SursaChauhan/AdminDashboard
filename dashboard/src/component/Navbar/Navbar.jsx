@@ -6,7 +6,7 @@ const Navbar = () => {
   return (
     <div style={{display:"flex",justifyContent:"space-around",alignItems:"center",width:"100%"}}>
         <div>
-        <img src="https://play-lh.googleusercontent.com/GDz-jb59bT1pStsNQ_8w0jmu5gsKInnTPSWQT30_GVDFY6ODx4RdzbYhi0tB4pelxA" alt="logo" style={{width:"40px"}}/>
+        <img src="https://blackcoffer.com/wp-content/uploads/2023/10/Black-720x172-4.png" alt="logo" style={{width:"20%"}}/>
 </div>
       <Search/>
       <Profile/>
