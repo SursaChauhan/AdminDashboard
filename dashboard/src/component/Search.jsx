@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SearchBar from '@mkyy/mui-search-bar';
 import axios from 'axios';
-import Dashboard from '../DashBaord';
+import Dashboard from './DashBaord';
 
 
 const Search = () => {

@@ -25,7 +25,7 @@ import AnalyticsIcon from '@mui/icons-material/Analytics';
 
 import Analytics from './Analytics'; 
 import DashBaord from './DashBaord';
-import Navbar from './Navbar/Navbar';
+import Navbar from './Navbar';
 
 const drawerWidth = 240;
 

@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, Modal, Container, TextField, Grid, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import {useDispatch} from 'react-redux' 
+import {register} from '../redux/Action.js'
+
+import { AppBar, Toolbar, Typography, Button, Modal, Container, TextField,
+     Grid, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
 const Login = () => {
+    const dispatch =useDispatch();
   const [open, setOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -14,10 +19,10 @@ const Login = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
+
       ...formData,
       [name]: value
     });
-    console.log(formData)
   };
 
   const handleToggle = () => {
@@ -27,6 +32,13 @@ const Login = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+const handleSubmit =(e)=>{
+  console.log("handlesubmit called");
+    e.preventDefault();
+    console.log(formData);
+dispatch(register(formData));
+handleClose();
+}
  
   return (
     <div>
@@ -44,7 +56,7 @@ const Login = () => {
             <Typography variant="h4" component="h1" gutterBottom>
               {isLogin ? 'Login' : 'Register'}
             </Typography>
-            <form>
+            <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>
                 {!isLogin && (
                   <Grid item xs={12}>
@@ -91,12 +103,12 @@ const Login = () => {
                   </Grid>
                 )}
                 <Grid item xs={12}>
-                  <Button variant="contained" color="primary" fullWidth>
+                  <Button variant="contained" color="primary" fullWidth type='submit'>
                     {isLogin ? 'Login' : 'Register'}
                   </Button>
                 </Grid>
                 <Grid item xs={12}>
-                  <Button onClick={handleToggle} fullWidth>
+                  <Button onClick={handleToggle} fullWidth >
                     {isLogin ? 'Register' : 'Login'}
                   </Button>
                 </Grid>

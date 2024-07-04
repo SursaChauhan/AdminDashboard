@@ -9,7 +9,8 @@ import  {Get_data_loading, Get_data_success, Get_data_error, Post_data_error, Po
 let initialState = {
     isLoading: false,
     isError: false,
-data:[]
+data:[],
+formdata:[]
 }
 
 const reducer = (state = initialState, action) => {
@@ -34,11 +35,11 @@ const reducer = (state = initialState, action) => {
         case Delete_data_error   : return {...state,isLoading:false,isError:true}
 
         case login_loading : return {...state,isLoading:true,isError:false}
-        case login_success : return {...state,isLoading:false,data:payload}
+        case login_success : return {...state,isLoading:false,formdata:payload}
         case login_error   : return {...state,isLoading:false,isError:true}
 
         case register_loading : return {...state,isLoading:true,isError:false}
-        case register_success : return {...state,isLoading:false,data:payload}
+        case register_success : return {...state,isLoading:false,formdata:payload}
         case register_error  : return {...state,isLoading:false,isError:true}
 
         default :return state;
