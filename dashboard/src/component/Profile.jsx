@@ -12,8 +12,13 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/Action";
+import { logout_success } from "../redux/Action.js";
 
 export default function AccountMenu() {
+const dispatch =useDispatch();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -22,6 +27,10 @@ export default function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleLogOut =()=>{
+dispatch(logout_success())
+handleClose();
+  }
   
   return (
     <React.Fragment>
@@ -89,7 +98,7 @@ export default function AccountMenu() {
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleLogOut}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

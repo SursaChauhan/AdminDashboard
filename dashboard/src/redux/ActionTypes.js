@@ -17,6 +17,7 @@ export const Delete_data_error = "Delete_data_error"
 export const login_loading = "login_loading"
 export const login_success = "login_success"
 export const login_error = "login_error"
+export const logout ='logout'
 
 export const register_loading = "register_loading"
 export const register_success = "register_success"

@@ -3,15 +3,16 @@ import  {Get_data_loading, Get_data_success, Get_data_error, Post_data_error, Po
     login_loading, login_success, register_error, register_loading, register_success,
     Delete_data_loading,
     Delete_data_success,
-    Delete_data_error}  from './ActionTypes.js';
+    Delete_data_error,logout}  from './ActionTypes.js';
 
 
-let initialState = {
-    isLoading: false,
-    isError: false,
-data:[],
-formdata:[]
-}
+    const initialState = {
+        isLoading: false,
+        isError: false,
+        data: [],
+        formdata: [],
+        IsLoggedIn: false, // Ensure correct casing
+    };
 
 const reducer = (state = initialState, action) => {
 
@@ -35,8 +36,10 @@ const reducer = (state = initialState, action) => {
         case Delete_data_error   : return {...state,isLoading:false,isError:true}
 
         case login_loading : return {...state,isLoading:true,isError:false}
-        case login_success : return {...state,isLoading:false,formdata:payload}
+        case login_success : return {...state,isLoading:false,formdata:payload,IsLoggedIn:true}
         case login_error   : return {...state,isLoading:false,isError:true}
+
+        case logout   : return {...state,IsLoggedIn:false}
 
         case register_loading : return {...state,isLoading:true,isError:false}
         case register_success : return {...state,isLoading:false,formdata:payload}
