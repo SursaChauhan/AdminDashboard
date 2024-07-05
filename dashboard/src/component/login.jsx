@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {useDispatch} from 'react-redux' 
-import {register} from '../redux/Action.js'
+import {register,login} from '../redux/Action.js'
 
 import { AppBar, Toolbar, Typography, Button, Modal, Container, TextField,
      Grid, RadioGroup, FormControlLabel, Radio } from '@mui/material';
@@ -36,7 +36,11 @@ const handleSubmit =(e)=>{
   console.log("handlesubmit called");
     e.preventDefault();
     console.log(formData);
-dispatch(register(formData));
+    if (isLogin) {
+      dispatch(login(formData)); // Dispatch login action
+  } else {
+      dispatch(register(formData)); // Dispatch register action
+  }
 handleClose();
 }
  

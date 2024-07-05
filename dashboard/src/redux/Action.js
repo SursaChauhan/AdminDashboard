@@ -1,19 +1,24 @@
-import { login_error, login_loading, register_error, register_loading, register_success } from "./ActionTypes"
+import { login_error, login_loading, login_success, register_error, register_loading, register_success } from "./ActionTypes"
 import axios from 'axios'
 import { useDispatch } from "react-redux"
  const baseURL = 'http://localhost:8080/api'
 
-// export const login =(dispatch)=>{
-//     try{
-// dispatch({type:login_loading})
+export const login =(formdata)=>async(dispatch)=>{
+  dispatch({type:login_loading})
+  const {email,password} =formdata;
+    try{
 
-// const res = axios.post(`${baseURL}/login`,{
 
-// })
-//     }catch(err){
-// dispatch({type: login_error})
-//     }
-// }
+const res =await axios.post(`${baseURL}/login`,{email,password},{
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+dispatch({type:login_success,payload:res.data})
+    }catch(err){
+dispatch({type: login_error,payload:err})
+    }
+}
 
 
 export const register =(formdata)=>async(dispatch)=>{
