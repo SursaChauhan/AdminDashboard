@@ -12,30 +12,42 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { login } from "../redux/Action";
+import { useDispatch, useSelector } from "react-redux";
 import { logout_success } from "../redux/Action.js";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from "react";
 
 export default function AccountMenu() {
-const dispatch =useDispatch();
+  const {IsLoggedIn} =useSelector((state)=>state.auth)
+  const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleLogOut =()=>{
-dispatch(logout_success())
-handleClose();
-  }
-  
+
+  const handleLogOut = () => {
+    dispatch(logout_success());
+    handleClose();
+    // toast.success('Logged out successfully!');
+  };
+  useEffect(() => {
+    console.log('IsLoggedIn changed:', IsLoggedIn);
+    if (IsLoggedIn) {
+      toast.success('Logged in successfully!');
+    }
+  }, [IsLoggedIn]);
+
   return (
     <React.Fragment>
-      <Box 
-      >
+      <Box>
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
@@ -88,9 +100,7 @@ handleClose();
           <Avatar /> Profile
         </MenuItem>
 
-
         <Divider />
-
 
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
@@ -105,6 +115,18 @@ handleClose();
           Logout
         </MenuItem>
       </Menu>
+
+      <ToastContainer
+        style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </React.Fragment>
   );
 }

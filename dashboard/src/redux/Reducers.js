@@ -36,7 +36,7 @@ const reducer = (state = initialState, action) => {
         case Delete_data_error   : return {...state,isLoading:false,isError:true}
 
         case login_loading : return {...state,isLoading:true,isError:false}
-        case login_success : return {...state,isLoading:false,formdata:payload,IsLoggedIn:true}
+        case login_success : return {...state,IsLoggedIn:true,formdata:payload,}
         case login_error   : return {...state,isLoading:false,isError:true}
 
         case logout   : return {...state,IsLoggedIn:false}
