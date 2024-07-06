@@ -25,15 +25,15 @@ const reducer = (state = initialState, action) => {
         case Get_data_error : return {...state,isLoading:false,isError:true}
 
         case Post_data_loading : return {...state,isLoading:true,isError:false}
-        case Post_data_success : return {...state,isLoading:false,data:payload}
+        case Post_data_success : return {...state,isLoading:false}
         case Post_data_error : return {...state,isLoading:false,isError:true}
 
         case Patch_data_loading : return {...state,isLoading:true,isError:false}
-        case Patch_data_success : return {...state,isLoading:false,data:payload}
+        case Patch_data_success : return {...state,isLoading:false}
         case Patch_data_error   : return {...state,isLoading:false,isError:true}
 
         case Delete_data_loading: return {...state,isLoading:true,isError:false}
-        case Delete_data_success : return {...state,isLoading:false,data:payload}
+        case Delete_data_success : return {...state,isLoading:false}
         case Delete_data_error   : return {...state,isLoading:false,isError:true}
 
         case login_loading : return {...state,isLoading:true,isError:false}

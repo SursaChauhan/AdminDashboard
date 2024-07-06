@@ -60,6 +60,7 @@ export const getData = (token) => async (dispatch) => {
     })
    
     dispatch({ type: Get_data_success, payload: res.data })
+    console.log(res.data);
   } catch (error) {
     console.log(error.response.data.message);
     dispatch({ type: Get_data_error, payload: error })
@@ -75,7 +76,11 @@ export const postCourse = (courseData, token) => async (dispatch) => {
         'Content-Type': 'application/json'
       }
     });
-    dispatch({ type: Post_data_success, payload: res.data });
+     // Dispatch success action for posting course
+     dispatch({ type: Post_data_success });
+
+     // Fetch updated data
+     dispatch(getData(token));
   } catch (error) {
     console.log(error.response.data.message);
     dispatch({ type: Post_data_error, payload: error });
@@ -83,16 +88,19 @@ export const postCourse = (courseData, token) => async (dispatch) => {
 };
 
 // PATCH Course
-export const patchCourse = (courseId, courseData, token) => async (dispatch) => {
+export const patchCourse = (token,courseId, courseData) => async (dispatch) => {
   dispatch({ type: Patch_data_loading });
   try {
+    console.log(token,courseId,courseData);
     const res = await axios.patch(`${baseURL}/courses/${courseId}`, courseData, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
     });
-    dispatch({ type: Patch_data_success, payload: res.data });
+ 
+    dispatch({ type: Patch_data_success});
+    dispatch(getData(token));
   } catch (error) {
     console.log(error.response.data.message);
     dispatch({ type: Patch_data_error, payload: error });
@@ -102,13 +110,16 @@ export const patchCourse = (courseId, courseData, token) => async (dispatch) => 
 export const deleteCourse = (token,courseId) => async (dispatch) => {
   dispatch({ type: Delete_data_loading });
   try {
-    await axios.delete(`${baseURL}/courses/${courseId}`, {
+   const res=  await axios.delete(`${baseURL}/courses/${courseId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
     });
-    dispatch({ type: Delete_data_success, payload: courseId });
+  
+    toast.success(res.data.message);
+    dispatch({ type: Delete_data_success});
+    dispatch(getData(token));
   } catch (error) {
     console.log(error.response.data.message);
     dispatch({ type: Delete_data_error, payload: error });

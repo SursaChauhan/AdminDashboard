@@ -62,8 +62,10 @@ const Dashboard = () => {
   const handlePostCourse = async (course) => {
     try {
       const {token} =loginData;
-      dispatch(postCourse(token));
-      handleGetCourses();
+      console.log(token,course);
+      dispatch(postCourse(course,token));
+      
+      // handleGetCourses();
     } catch (error) {
       console.error(error.message);
     }
@@ -77,9 +79,9 @@ const Dashboard = () => {
       const {token} =loginData;
       dispatch(getData(token));
 
-      console.log(data);
+      // console.log(data);
       // const totalPages = Math.ceil(response.data.length / limit);
-      setCourses(data);
+    
       // setPages(totalPages);
     } catch (error) {
       console.error(error.message);
@@ -104,8 +106,8 @@ const Dashboard = () => {
     try {
       const {token} =loginData;
       dispatch(patchCourse(token, id, course));
-      console.log("Updated course:");
-      handleGetCourses();
+      console.log("Updated course");
+      // handleGetCourses();
     } catch (error) {
       console.error(error.message);
     }
@@ -202,7 +204,7 @@ const Dashboard = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {courses.map((course) => (
+            {courses?.map((course) => (
               <TableRow key={course._id}>
                 <TableCell>{course.title}</TableCell>
                 <TableCell>{course.description}</TableCell>
