@@ -19,16 +19,20 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from "react";
 
 export default function AccountMenu() {
-  const {IsLoggedIn} =useSelector((state)=>state.auth)
+  const {IsLoggedIn,loginData} =useSelector((state)=>state.auth)
   const dispatch = useDispatch();
+  // console.log(loginData.user.name);
+  
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [profileName ,setProfileName] =useState("U");
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
+ 
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -42,6 +46,9 @@ export default function AccountMenu() {
     console.log('IsLoggedIn changed:', IsLoggedIn);
     if (IsLoggedIn) {
       toast.success('Logged in successfully!');
+      const firstNameCapitalized = loginData.user.name.charAt(0).toUpperCase();
+      //  + loginData.user.name.slice(1);
+      setProfileName(firstNameCapitalized)
     }
   }, [IsLoggedIn]);
 
@@ -57,7 +64,7 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+            <Avatar sx={{ width: 32, height: 32 }}>{profileName}</Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -117,7 +124,7 @@ export default function AccountMenu() {
       </Menu>
 
       <ToastContainer
-        style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}
+        style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' ,zIndex:9999}}
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}

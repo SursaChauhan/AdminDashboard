@@ -47,10 +47,12 @@ const Login = () => {
     e.preventDefault();
     if (isLogin) {
       dispatch(login(formData));
+      handleClose();
     } else {
       dispatch(register(formData));
+      handleToggle();
     }
-    handleClose();
+   
   };
 
   useEffect(() => {
@@ -69,9 +71,9 @@ const Login = () => {
           </Button>
         </Toolbar>
       </AppBar>
-      <Modal open={open} onClose={handleClose}>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-          <Container maxWidth="sm" style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px', maxWidth: '40%' }}>
+      <Modal open={open} onClose={handleClose} style={{zIndex:1}}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh',zIndex:1  }}>
+          <Container maxWidth="sm" style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px', maxWidth: '40%'}}>
             <Typography variant="h4" component="h1" gutterBottom>
               {isLogin ? 'Login' : 'Register'}
             </Typography>
@@ -125,7 +127,7 @@ const Login = () => {
         </div>
       </Modal>
       <ToastContainer
-        style={{ left: '50%', top: '20%', transform: 'translate(-50%, 0)' }}
+        style={{ left: '20%', top: '10%', transform: 'translate(0, 0)' ,zIndex:2}}
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
