@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 
 const Navbar = () => {
   const IsLoggedIn = useSelector((state) => state.auth.IsLoggedIn); 
-  console.log(IsLoggedIn);
+ 
   return (
 
     <div style={{display:"flex",justifyContent:"space-around",alignItems:"center",width:"100%"}}>

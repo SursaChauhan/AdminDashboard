@@ -21,11 +21,14 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
+import { useSelector } from 'react-redux';
+import Auth from './Auth';
 
 
 import Analytics from './Analytics'; 
 import DashBaord from './DashBaord';
 import Navbar from './Navbar';
+import StDashboard from './StDashBoard';
 
 const drawerWidth = 240;
 
@@ -99,7 +102,9 @@ export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [selectedComponent, setSelectedComponent] = useState(null); // State to keep track of selected component
+  const {IsLoggedIn,loginData} =useSelector((state)=>state.auth)
 
+const role = loginData.user.role;
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -115,6 +120,23 @@ export default function MiniDrawer() {
 
   // Render component based on selection
   const renderComponent = () => {
+
+    if (!IsLoggedIn) {
+      return <Auth />;
+    }
+else if(role == 'student'){
+  switch (selectedComponent) {
+    case 'Dashboard':
+      return <StDashboard/>;
+    // case 'Analytics':
+    //   return <Analytics/>;
+    // case 'Trash':
+    //   return <div>Trash Component</div>;
+    default:
+      return <StDashboard/>;
+  }
+}
+else{
     switch (selectedComponent) {
       case 'Dashboard':
         return <DashBaord/>;
@@ -125,6 +147,7 @@ export default function MiniDrawer() {
       default:
         return <DashBaord/>;
     }
+  }
   };
 
   return (

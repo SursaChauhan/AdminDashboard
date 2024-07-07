@@ -29,7 +29,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { getData ,postCourse,patchCourse,deleteCourse} from "../redux/Action";
+import { getData, postCourse, patchCourse, deleteCourse } from "../redux/Action";
 
 const Dashboard = () => {
   const [courses, setCourses] = useState([]);
@@ -39,33 +39,42 @@ const Dashboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pages, setPages] = useState(0);
   const [sortOrder, setSortOrder] = useState("");
+  const [file, setFile] = useState(null);
 
-  const {loginData,data,page,totalPages} =useSelector((state)=>state.auth);
-  const dispatch =useDispatch();
+  const { loginData, data, page, totalPages,IsLoggedIn } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   const [initialValues, setInitialValues] = useState({
     _id: "",
     title: "",
     description: "",
-  
+
   });
 
   const handleAddCourse = () => {
     setInitialValues({
       title: "",
       description: "",
-     
+
     });
+    setFile(null);
     setOpen(true);
   };
 
   const handlePostCourse = async (course) => {
     try {
-      const {token} =loginData;
-      console.log(token,course);
-      dispatch(postCourse(course,token));
-      
-      // handleGetCourses();
+      const { token } = loginData;
+      console.log(course);
+      const formData = new FormData();
+      formData.append("title", course.title);
+      formData.append("description", course.description);
+      if (file) {
+        console.log("file",file.name)
+        formData.append("file", file); // Ensure the key matches your backend's expected field name
+      }
+      console.log("FormData before sending:");
+     
+      dispatch(postCourse(formData, token));
     } catch (error) {
       console.error(error.message);
     }
@@ -74,15 +83,9 @@ const Dashboard = () => {
 
   const handleGetCourses = async () => {
     try {
-      // const token = localStorage.getItem("usertoken");
       const limit = 2
-      const {token} =loginData;
-      dispatch(getData(token,currentPage,limit));
-
-      // console.log(data);
-    //   const totalPages = Math.ceil(data.length / limit);
-    // console.log(totalPages);
-      // setPages(totalPages);
+      const { token } = loginData;
+      dispatch(getData(token, currentPage, limit));
     } catch (error) {
       console.error(error.message);
     }
@@ -101,7 +104,7 @@ const Dashboard = () => {
   const handleCourseUpdate = async (course) => {
     const id = courseId;
     try {
-      const {token} =loginData;
+      const { token } = loginData;
       dispatch(patchCourse(token, id, course));
       console.log("Updated course");
     } catch (error) {
@@ -113,9 +116,9 @@ const Dashboard = () => {
   const handleDeleteCourse = async (course) => {
     const id = course._id;
     try {
-      const {token} =loginData;
+      const { token } = loginData;
       dispatch(deleteCourse(token, id));
-     
+
       console.log("Deleted course:");
       handleGetCourses();
     } catch (error) {
@@ -128,6 +131,9 @@ const Dashboard = () => {
     setOpen(false);
   };
 
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
   const handleChange = (event) => {
     setSortOrder(event.target.value);
 
@@ -150,16 +156,17 @@ const Dashboard = () => {
     handleGetCourses();
   }, [currentPage]);
 
-  
-   useEffect(()=>{
-   
-     setCourses(data);
-    //  setCurrentPage(page);
-    //  setPages(totalPages);
-    },[data]);
+
+  useEffect(() => {
+
+    setCourses(data);
+  }, [data]);
 
   return (
-    <>
+   
+    <div>  
+
+<div>
       <div
         style={{
           display: "flex",
@@ -280,7 +287,16 @@ const Dashboard = () => {
                       )}
                     </ErrorMessage>
                   </Grid>
-                  
+
+                  <Grid item xs={12}>
+                    <input
+                      type="file"
+                      name="image"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+                  </Grid>
+
                 </Grid>
               </DialogContent>
               <DialogActions>
@@ -344,9 +360,16 @@ const Dashboard = () => {
                       )}
                     </ErrorMessage>
                   </Grid>
-                 
-                 
-                
+
+                  <Grid item xs={12}>
+                    <input
+                      type="file"
+                      name="image"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+                  </Grid>
+
                 </Grid>
               </DialogContent>
               <DialogActions>
@@ -365,8 +388,12 @@ const Dashboard = () => {
             </Form>
           )}
         </Formik>
-      </Dialog>
-    </>
+      </Dialog> 
+      </div>
+
+
+    </div>
+
   );
 };
 
