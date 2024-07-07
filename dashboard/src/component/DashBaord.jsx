@@ -40,7 +40,7 @@ const Dashboard = () => {
   const [pages, setPages] = useState(0);
   const [sortOrder, setSortOrder] = useState("");
 
-  const {loginData,data} =useSelector((state)=>state.auth);
+  const {loginData,data,page,totalPages} =useSelector((state)=>state.auth);
   const dispatch =useDispatch();
 
   const [initialValues, setInitialValues] = useState({
@@ -75,13 +75,13 @@ const Dashboard = () => {
   const handleGetCourses = async () => {
     try {
       // const token = localStorage.getItem("usertoken");
-      // const limit = 8;
+      const limit = 2
       const {token} =loginData;
-      dispatch(getData(token));
+      dispatch(getData(token,currentPage,limit));
 
       // console.log(data);
-      // const totalPages = Math.ceil(response.data.length / limit);
-    
+    //   const totalPages = Math.ceil(data.length / limit);
+    // console.log(totalPages);
       // setPages(totalPages);
     } catch (error) {
       console.error(error.message);
@@ -93,9 +93,6 @@ const Dashboard = () => {
     setInitialValues({
       title: course.title,
       description: course.description,
-      // topic: course.topic,
-      // region: course.region,
-      // pestle: course.pestle,
     });
     setCourseId(id);
     setEditOpen(true);
@@ -107,7 +104,6 @@ const Dashboard = () => {
       const {token} =loginData;
       dispatch(patchCourse(token, id, course));
       console.log("Updated course");
-      // handleGetCourses();
     } catch (error) {
       console.error(error.message);
     }
@@ -154,9 +150,12 @@ const Dashboard = () => {
     handleGetCourses();
   }, [currentPage]);
 
+  
    useEffect(()=>{
-  //   handleGetCourses();
+   
      setCourses(data);
+    //  setCurrentPage(page);
+    //  setPages(totalPages);
     },[data]);
 
   return (
@@ -197,10 +196,7 @@ const Dashboard = () => {
             <TableRow>
               <TableCell>Title</TableCell>
               <TableCell>Description</TableCell>
-              {/* <TableCell>Topic</TableCell>
-              <TableCell>Region</TableCell>
-              <TableCell>Pestle</TableCell>
-              <TableCell>Action</TableCell> */}
+              <TableCell>Edit / Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -208,9 +204,6 @@ const Dashboard = () => {
               <TableRow key={course._id}>
                 <TableCell>{course.title}</TableCell>
                 <TableCell>{course.description}</TableCell>
-                {/* <TableCell>{course.topic}</TableCell>
-                <TableCell>{course.region}</TableCell>
-                <TableCell>{course.pestle}</TableCell> */}
                 <TableCell>
                   <IconButton onClick={() => handleCourseEdit(course)}>
                     <EditIcon />
@@ -235,10 +228,10 @@ const Dashboard = () => {
       >
         <Stack spacing={2}>
           <Pagination
-            count={pages}
+            count={totalPages}
             variant="outlined"
             shape="rounded"
-            page={currentPage}
+            page={page}
             onChange={handlePageChange}
           />
         </Stack>
@@ -252,9 +245,6 @@ const Dashboard = () => {
           validationSchema={Yup.object({
             title: Yup.string().required("Title is required"),
             description: Yup.string().required("description is required"),
-            // topic: Yup.string().required("Topic is required"),
-            // region: Yup.string().required("Region is required"),
-            // pestle: Yup.string().required("Pestle is required"),
           })}
           onSubmit={handlePostCourse}
         >
@@ -319,9 +309,6 @@ const Dashboard = () => {
           validationSchema={Yup.object({
             title: Yup.string().required("Title is required"),
             description: Yup.string().required("description is required"),
-            // topic: Yup.string().required("Topic is required"),
-            // region: Yup.string().required("Region is required"),
-            // pestle: Yup.string().required("Pestle is required"),
           })}
           onSubmit={handleCourseUpdate}
         >

@@ -12,16 +12,20 @@ const initialState = {
         data: [],
         formdata: [],
         loginData: [],
-        IsLoggedIn: false, // Ensure correct casing
+        IsLoggedIn: false,
+        page  : 0,
+        totalPages : 0
+         // Ensure correct casing
     };
 
 const reducer = (state = initialState, action) => {
 
-    const { type, payload } = action
+    const { type, payload } = action;
+    console.log(payload);
 
     switch (type) {
         case Get_data_loading : return {...state,isLoading:true,isError:false}
-        case Get_data_success : return {...state,isLoading:false,data:payload}
+        case Get_data_success : return {...state,isLoading:false,data:payload.courses,page:payload.page,totalPages:payload.totalPages}
         case Get_data_error : return {...state,isLoading:false,isError:true}
 
         case Post_data_loading : return {...state,isLoading:true,isError:false}

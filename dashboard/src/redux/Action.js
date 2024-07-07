@@ -50,17 +50,21 @@ export const logout_success = () => ({
   type: logout
 });
 
-export const getData = (token) => async (dispatch) => {
+export const getData = (token,page,limit) => async (dispatch) => {
   dispatch({ type: Get_data_loading })
   try {
     const res = await axios.get(`${baseURL}/courses`, {
       headers: {
         Authorization: `Bearer ${token}`
-      }
+      },
+      params: {
+        page,  // specify the page number you want to fetch
+        limit // specify the number of items per page
+    }
     })
    
     dispatch({ type: Get_data_success, payload: res.data })
-    console.log(res.data);
+    console.log(res.data.page, res.data.totalPages);
   } catch (error) {
     console.log(error.response.data.message);
     dispatch({ type: Get_data_error, payload: error })
