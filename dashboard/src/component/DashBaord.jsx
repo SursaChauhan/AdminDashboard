@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+// component/Dashboard.js
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Button,
@@ -41,21 +42,22 @@ const Dashboard = () => {
   const [sortOrder, setSortOrder] = useState("");
   const [file, setFile] = useState(null);
 
-  const { loginData, data, page, totalPages,IsLoggedIn } = useSelector((state) => state.auth);
+  const { loginData, data, page, totalPages, IsLoggedIn } = useSelector(
+    (state) => state.auth
+  );
   const dispatch = useDispatch();
+ 
 
   const [initialValues, setInitialValues] = useState({
     _id: "",
     title: "",
     description: "",
-
   });
 
   const handleAddCourse = () => {
     setInitialValues({
       title: "",
       description: "",
-
     });
     setFile(null);
     setOpen(true);
@@ -69,11 +71,11 @@ const Dashboard = () => {
       formData.append("title", course.title);
       formData.append("description", course.description);
       if (file) {
-        console.log("file",file.name)
+        console.log("file", file.name);
         formData.append("file", file); // Ensure the key matches your backend's expected field name
       }
       console.log("FormData before sending:");
-     
+
       dispatch(postCourse(formData, token));
     } catch (error) {
       console.error(error.message);
@@ -83,7 +85,7 @@ const Dashboard = () => {
 
   const handleGetCourses = async () => {
     try {
-      const limit = 2
+      const limit = 2;
       const { token } = loginData;
       dispatch(getData(token, currentPage, limit));
     } catch (error) {
@@ -134,6 +136,7 @@ const Dashboard = () => {
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
+
   const handleChange = (event) => {
     setSortOrder(event.target.value);
 
@@ -152,21 +155,18 @@ const Dashboard = () => {
     setCurrentPage(page);
   };
 
+
+
   useEffect(() => {
     handleGetCourses();
   }, [currentPage]);
 
-
   useEffect(() => {
-
     setCourses(data);
   }, [data]);
 
   return (
-   
-    <div>  
-
-<div>
+    <div>
       <div
         style={{
           display: "flex",
@@ -209,8 +209,18 @@ const Dashboard = () => {
           <TableBody>
             {courses?.map((course) => (
               <TableRow key={course._id}>
-                <TableCell>{course.title}</TableCell>
-                <TableCell>{course.description}</TableCell>
+                <TableCell
+                 
+                  style={{ cursor: "pointer" }}
+                >
+                  {course.title}
+                </TableCell>
+                <TableCell
+                 
+                  style={{ cursor: "pointer" }}
+                >
+                  {course.description}
+                </TableCell>
                 <TableCell>
                   <IconButton onClick={() => handleCourseEdit(course)}>
                     <EditIcon />
@@ -296,7 +306,6 @@ const Dashboard = () => {
                       onChange={handleFileChange}
                     />
                   </Grid>
-
                 </Grid>
               </DialogContent>
               <DialogActions>
@@ -369,7 +378,6 @@ const Dashboard = () => {
                       onChange={handleFileChange}
                     />
                   </Grid>
-
                 </Grid>
               </DialogContent>
               <DialogActions>
@@ -388,12 +396,8 @@ const Dashboard = () => {
             </Form>
           )}
         </Formik>
-      </Dialog> 
-      </div>
-
-
+      </Dialog>
     </div>
-
   );
 };
 
