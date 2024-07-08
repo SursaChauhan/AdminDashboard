@@ -87,6 +87,7 @@ const StDashboard = () => {
           <Grid item xs={12} sm={6} md={4} key={course._id}>
             <Card>
               <CardContent>
+                <img src={course.ImageURl} width={200} height={200} />
                 <Typography variant="h6" component="div">
                   {course.title}
                 </Typography>

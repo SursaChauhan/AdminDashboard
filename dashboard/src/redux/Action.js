@@ -61,7 +61,7 @@ export const getData = (token, page, limit) => async (dispatch) => {
         limit // specify the number of items per page
       }
     })
-
+// console.log(res.data);
     dispatch({ type: Get_data_success, payload: res.data })
   } catch (error) {
     console.log(error.response.data.message);

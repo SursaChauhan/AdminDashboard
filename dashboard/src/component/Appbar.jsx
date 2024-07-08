@@ -104,7 +104,8 @@ export default function MiniDrawer() {
   const [selectedComponent, setSelectedComponent] = useState(null); // State to keep track of selected component
   const {IsLoggedIn,loginData} =useSelector((state)=>state.auth)
 
-const role = loginData.user.role;
+  // console.log(loginData.user.role);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -124,7 +125,8 @@ const role = loginData.user.role;
     if (!IsLoggedIn) {
       return <Auth />;
     }
-else if(role == 'student'){
+    
+else if(loginData.user.role === 'student'){
   switch (selectedComponent) {
     case 'Dashboard':
       return <StDashboard/>;
