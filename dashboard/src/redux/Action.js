@@ -1,4 +1,9 @@
-import { Delete_data_error, Delete_data_loading, Delete_data_success, Get_data_error, Get_data_loading, Get_data_success, login_error, login_loading, login_success, logout, Patch_data_error, Patch_data_loading, Patch_data_success, Post_data_error, Post_data_loading, Post_data_success, register_error, register_loading, register_success } from "./ActionTypes"
+import { Delete_data_error, Delete_data_loading, Delete_data_success, Get_data_error, 
+  Get_data_loading, Get_data_success, LectureData_data_success, login_error, login_loading,
+   login_success, logout, Patch_data_error, Patch_data_loading, 
+  Patch_data_success, Post_data_error, Post_data_loading,
+   Post_data_success, register_error, register_loading, register_success,
+   enrollmentData_data_success } from "./ActionTypes"
 import axios from 'axios'
 import { toast } from 'react-toastify';
 const baseURL = 'http://localhost:8080/api';
@@ -129,5 +134,70 @@ export const deleteCourse = (token, courseId) => async (dispatch) => {
   } catch (error) {
     console.log(error.response.data.message);
     dispatch({ type: Delete_data_error, payload: error });
+  }
+};
+
+export const getLectures = (token, courseIds, page, limit) => async (dispatch) => {
+  dispatch({ type: Get_data_loading })
+  try {
+    const res = await axios.get(`${baseURL}/courses`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      params: {
+        courseIds,
+       page,  // specify the page number you want to fetch
+        limit // specify the number of items per page
+      }
+    })
+// console.log(res.data);
+    dispatch({ type: LectureData_data_success, payload: res.data })
+  } catch (error) {
+    console.log(error.response.data.message);
+    dispatch({ type: Get_data_error, payload: error })
+  }
+}
+
+export const getEnrollData = (token) => async (dispatch) => {
+  dispatch({ type: 'Get_data_loading' });
+  try {
+    const res = await axios.get(`${baseURL}/enroll`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+console.log(res);
+
+    // Extract course IDs from the response
+    var courseIds =[];
+     courseIds = res.data.map(course => course.course);
+    console.log(courseIds);
+ dispatch({ type: enrollmentData_data_success,payload:courseIds});
+    // Array to store all lectures
+    let allLectures = [];
+
+    // Fetch lectures for each course ID
+    await Promise.all(courseIds.map(async courseId => {
+      const lecturesRes = await axios.get(`${baseURL}/lectures`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        params:{
+          courseId:courseId
+        }
+      });
+// console.log(lecturesRes);
+      // Append lectures to allLectures array
+      allLectures = [...allLectures, ...lecturesRes.data];
+    }));
+
+    console.log('All lectures:', allLectures);
+
+    // Dispatch success action with lecture data
+    dispatch({ type: 'LectureData_data_success', payload: allLectures });
+
+  } catch (error) {
+    console.log('Error:', error.response.data.message);
+    dispatch({ type: 'Get_data_error', payload: error });
   }
 };

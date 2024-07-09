@@ -29,6 +29,7 @@ import Analytics from './Analytics';
 import DashBaord from './DashBaord';
 import Navbar from './Navbar';
 import StDashboard from './StDashBoard';
+import Lectures from './Lectures';
 
 const drawerWidth = 240;
 
@@ -130,8 +131,8 @@ else if(loginData.user.role === 'student'){
   switch (selectedComponent) {
     case 'Dashboard':
       return <StDashboard/>;
-    // case 'Analytics':
-    //   return <Analytics/>;
+    case 'Analytics':
+      return <Lectures/>;
     // case 'Trash':
     //   return <div>Trash Component</div>;
     default:

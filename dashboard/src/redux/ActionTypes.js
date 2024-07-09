@@ -22,3 +22,6 @@ export const logout ='logout'
 export const register_loading = "register_loading"
 export const register_success = "register_success"
 export const register_error = "register_error"
+
+export const LectureData_data_success ="LectureData_data_success"
+export const enrollmentData_data_success = "enrollmentData_data_success"

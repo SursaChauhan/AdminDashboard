@@ -4,7 +4,9 @@ import {
     login_loading, login_success, register_error, register_loading, register_success,
     Delete_data_loading,
     Delete_data_success,
-    Delete_data_error, logout
+    Delete_data_error, logout,
+    LectureData_data_success,
+    enrollmentData_data_success
 } from './ActionTypes.js';
 
 
@@ -12,6 +14,8 @@ const initialState = {
     isLoading: false,
     isError: false,
     data: [],
+    LectureData :[],
+    enrollmentData :[],
     formdata: [],
     loginData: [],
     IsLoggedIn: false,
@@ -50,6 +54,10 @@ const reducer = (state = initialState, action) => {
         case register_loading: return { ...state, isLoading: true, isError: false }
         case register_success: return { ...state, isLoading: false, formdata: payload }
         case register_error: return { ...state, isLoading: false, isError: true }
+
+
+        case LectureData_data_success: return { ...state, isLoading: false, LectureData: payload,  }
+        case enrollmentData_data_success: return { ...state, isLoading: false, enrollmentData: payload, }
 
         default: return state;
     }
