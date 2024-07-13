@@ -11,8 +11,9 @@ import {
   Pagination,
   Card,
   CardContent,
+  Button,
 } from "@mui/material";
-import { getData } from "../redux/Action";
+import { getData, enrollCourse } from "../redux/Action";
 
 const StDashboard = () => {
   const [courses, setCourses] = useState([]);
@@ -48,6 +49,11 @@ const StDashboard = () => {
 
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
+  };
+
+  const handleEnroll = (courseId) => {
+    const { token } = loginData;
+    dispatch(enrollCourse(token, courseId));
   };
 
   useEffect(() => {
@@ -87,13 +93,20 @@ const StDashboard = () => {
           <Grid item xs={12} sm={6} md={4} key={course._id}>
             <Card>
               <CardContent>
-                <img src={course.ImageURl} width={200} height={200} />
+                <img src={course.ImageURl} width={200} height={200} alt={course.title} />
                 <Typography variant="h6" component="div">
                   {course.title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {course.description}
                 </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleEnroll(course._id)}
+                >
+                  Enroll
+                </Button>
               </CardContent>
             </Card>
           </Grid>

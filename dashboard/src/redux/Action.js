@@ -3,7 +3,7 @@ import { Delete_data_error, Delete_data_loading, Delete_data_success, Get_data_e
    login_success, logout, Patch_data_error, Patch_data_loading, 
   Patch_data_success, Post_data_error, Post_data_loading,
    Post_data_success, register_error, register_loading, register_success,
-   enrollmentData_data_success } from "./ActionTypes"
+   enrollmentData_data_success ,createEnrollment_data_success} from "./ActionTypes"
 import axios from 'axios'
 import { toast } from 'react-toastify';
 const baseURL = 'http://localhost:8080/api';
@@ -194,10 +194,39 @@ console.log(res);
     console.log('All lectures:', allLectures);
 
     // Dispatch success action with lecture data
-    dispatch({ type: 'LectureData_data_success', payload: allLectures });
+    dispatch({ type: LectureData_data_success, payload: allLectures });
 
   } catch (error) {
     console.log('Error:', error.response.data.message);
-    dispatch({ type: 'Get_data_error', payload: error });
+    dispatch({ type: Get_data_error, payload: error });
+  }
+};
+
+
+export const enrollCourse = (token, courseId) => async (dispatch) => {
+  console.log(token,courseId);
+  try {
+    const response = await axios.post(
+      `http://localhost:8080/api/enroll/${courseId}`,
+      {},
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = response.data;
+    console.log(data);
+
+    dispatch({
+      type: createEnrollment_data_success,
+    });
+  } catch (error) {
+    dispatch({
+      type: Get_data_error,
+      payload: error.message,
+    });
   }
 };

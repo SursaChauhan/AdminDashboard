@@ -6,7 +6,7 @@ import {
     Delete_data_success,
     Delete_data_error, logout,
     LectureData_data_success,
-    enrollmentData_data_success
+    enrollmentData_data_success,createEnrollment_data_success
 } from './ActionTypes.js';
 
 
@@ -58,6 +58,7 @@ const reducer = (state = initialState, action) => {
 
         case LectureData_data_success: return { ...state, isLoading: false, LectureData: payload,  }
         case enrollmentData_data_success: return { ...state, isLoading: false, enrollmentData: payload, }
+        case createEnrollment_data_success: return { ...state, isLoading: false }
 
         default: return state;
     }

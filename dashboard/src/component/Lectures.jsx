@@ -69,20 +69,20 @@ console.log(enrollmentData);
       </div>
 
       <Grid container spacing={2} style={{ marginTop: "20px" }}>
-        {lectures?.map((lecture) => (
-          <Grid item xs={12} sm={6} md={4} key={lecture._id}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6" component="div">
-                  {lecture.title}
-                </Typography>
-                {/* Assuming lecture includes video */}
-                {/* <video src={lecture.videoURL} controls width="100%" height="auto" /> */}
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+  {lectures?.map((lecture) => (
+    <Grid item xs={12} sm={6} md={4} key={lecture._id}>
+      <Card>
+        <CardContent>
+          <Typography variant="h6" component="div">
+            {lecture.title}
+          </Typography>
+          <video src={lecture.video} controls width="100%" height="auto" />
+        </CardContent>
+      </Card>
+    </Grid>
+  ))}
+</Grid>
+
 
       <div
         style={{
