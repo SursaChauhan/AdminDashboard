@@ -13,6 +13,8 @@ import {
   CardContent,
   Button,
 } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { getData, enrollCourse } from "../redux/Action";
 
 const StDashboard = () => {
@@ -53,7 +55,13 @@ const StDashboard = () => {
 
   const handleEnroll = (courseId) => {
     const { token } = loginData;
-    dispatch(enrollCourse(token, courseId));
+    dispatch(enrollCourse(token, courseId))
+      .then(() => {
+        toast.success("Successfully enrolled in the course!");
+      })
+      .catch((error) => {
+        toast.error("Failed to enroll in the course.");
+      });
   };
 
   useEffect(() => {
@@ -66,6 +74,7 @@ const StDashboard = () => {
 
   return (
     <div>
+      <ToastContainer />
       <div
         style={{
           display: "flex",

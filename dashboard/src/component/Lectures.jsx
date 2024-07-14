@@ -12,19 +12,28 @@ import {
   Card,
   CardContent,
 } from "@mui/material";
-import { getEnrollData } from '../redux/Action';
+import { getEnrollData, getLecturesById } from "../redux/Action";
 
 const Lectures = () => {
   const [lectures, setLectures] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCourseId, setSelectedCourseId] = useState("");
 
-  const { loginData, enrollmentData, LectureData, totalPages, page } = useSelector((state) => state.auth);
+  const { loginData, enrollmentData, LectureData, totalPages, page } = useSelector(
+    (state) => state.auth
+  );
   const dispatch = useDispatch();
-console.log(enrollmentData);
+
   useEffect(() => {
+    console.log("getting enroll data");
     dispatch(getEnrollData(loginData.token));
-  }, []);
+  }, [dispatch, loginData.token]);
+
+  useEffect(() => {
+    if (selectedCourseId) {
+      dispatch(getLecturesById(loginData.token, selectedCourseId, currentPage));
+    }
+  }, [dispatch, loginData.token, selectedCourseId, currentPage]);
 
   useEffect(() => {
     setLectures(LectureData);
@@ -32,6 +41,7 @@ console.log(enrollmentData);
 
   const handleCourseChange = (event) => {
     setSelectedCourseId(event.target.value);
+    setCurrentPage(1); // Reset to the first page when the course changes
   };
 
   const handlePageChange = (event, page) => {
@@ -59,9 +69,9 @@ console.log(enrollmentData);
             <MenuItem value="">
               <em>All</em>
             </MenuItem>
-            {enrollmentData.map(enrollment => (
-              <MenuItem key={enrollment.courseId} value={enrollment.courseId}>
-                {enrollment.courseTitle} {/* Assuming you have courseTitle in enrollment data */}
+            {enrollmentData.map((enrollment) => (
+              <MenuItem key={enrollment._id} value={enrollment.course._id}>
+                {enrollment.course.title} {/* Assuming you have courseTitle in enrollment data */}
               </MenuItem>
             ))}
           </Select>
@@ -69,20 +79,19 @@ console.log(enrollmentData);
       </div>
 
       <Grid container spacing={2} style={{ marginTop: "20px" }}>
-  {lectures?.map((lecture) => (
-    <Grid item xs={12} sm={6} md={4} key={lecture._id}>
-      <Card>
-        <CardContent>
-          <Typography variant="h6" component="div">
-            {lecture.title}
-          </Typography>
-          <video src={lecture.video} controls width="100%" height="auto" />
-        </CardContent>
-      </Card>
-    </Grid>
-  ))}
-</Grid>
-
+        {lectures?.map((lecture) => (
+          <Grid item xs={12} sm={6} md={4} key={lecture._id}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6" component="div">
+                  {lecture.title}
+                </Typography>
+                <video src={lecture.video} controls width="100%" height="auto" />
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
 
       <div
         style={{
@@ -97,15 +106,12 @@ console.log(enrollmentData);
             count={totalPages}
             variant="outlined"
             shape="rounded"
-            page={page}
+            page={currentPage}
             onChange={handlePageChange}
           />
         </Stack>
       </div>
     </div>
-    // <div>
-    //     "ji"
-    // </div>
   );
 };
 
