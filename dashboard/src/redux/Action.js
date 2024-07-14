@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Cookies from 'js-cookie';
 import {
   login_loading,
   login_success,
@@ -176,9 +177,13 @@ export const enrollCourse = (token, courseId) => async (dispatch) => {
   }
 };
 
-export const logout_success = () => ({
-  type: logout
-});
+export const logout_success = () => (dispatch) => {
+  // Clear cookies
+  Cookies.remove('persist:root');
+  
+  // Dispatch logout action to update state
+  dispatch({ type: logout });
+};
 
 
 
