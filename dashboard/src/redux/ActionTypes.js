@@ -26,3 +26,5 @@ export const register_error = "register_error"
 export const LectureData_data_success ="LectureData_data_success"
 export const enrollmentData_data_success = "enrollmentData_data_success"
 export const createEnrollment_data_success = "createEnrollment_data_success"
+
+export const chartData_data_success = "const chartData_data_success"

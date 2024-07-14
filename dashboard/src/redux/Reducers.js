@@ -6,7 +6,7 @@ import {
     Delete_data_success,
     Delete_data_error, logout,
     LectureData_data_success,
-    enrollmentData_data_success,createEnrollment_data_success
+    enrollmentData_data_success,createEnrollment_data_success,chartData_data_success
 } from './ActionTypes.js';
 
 
@@ -20,7 +20,8 @@ const initialState = {
     loginData: [],
     IsLoggedIn: false,
     page: 0,
-    totalPages: 0
+    totalPages: 0,
+    chartData:[]
     // Ensure correct casing
 };
 
@@ -60,6 +61,7 @@ const reducer = (state = initialState, action) => {
         case enrollmentData_data_success: return { ...state, isLoading: false, enrollmentData: payload, }
         case createEnrollment_data_success: return { ...state, isLoading: false }
 
+        case chartData_data_success :return{...state,chartData:payload}
         default: return state;
     }
 }

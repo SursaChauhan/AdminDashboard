@@ -1,89 +1,67 @@
-import React, { useEffect, useState } from 'react';
-import { Bar, Line, Pie, } from 'react-chartjs-2';
-import { Chart as chartjs } from 'chart.js/auto'
-import axios from 'axios';
+import React, { useEffect } from 'react';
+import { Bar, Line, Pie } from 'react-chartjs-2';
+import { useDispatch, useSelector } from 'react-redux';
+import { getOwnCourses } from '../redux/Action';
+import { Chart as chartjs, CategoryScale, LinearScale } from 'chart.js/auto'; // Import LinearScale for y-axis
 
 const Analytics = () => {
-  const [data,setData] =useState([]);
-  const currentPage =1;
-const limit =5;
+  const { loginData, chartData } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
-  const chartdata = {
-    labels: data.map((user)=>
-user.sector
-    ),
-    datasets: [
-      {
-        label: "Intensity",
-        data: data.map((user)=>
-        user.intensity
-            ),
-        backgroundColor: [ 'blue', 'green'
-        ],
-        borderColor: [
-          'green',
-        ],
-        borderWidth: 2
-      },
-      {
-        label: "LikelyHood",
-        data: data.map((user)=>
-          user.likelihood
-              ),
-        backgroundColor: ['orange'],
-        borderColor: [
-          'red',
+  useEffect(() => {
+    dispatch(getOwnCourses(loginData.token));
+  }, [dispatch, loginData.token]);
 
-        ],
-        borderWidth: 1
-      }
-    ]
-  }
-
-  const fetchdata=async()=>{
-    try{
-      const res = await axios.get(`https://backend-mongo-3.onrender.com/api/users`);
-      const responseData = res.data; // Assuming responseData is an object or array returned by your API
-
-      // Example: Destructuring data from the response
-      const { region, country, source } = responseData;
-
-      // Example: Setting data in state
-      setData(responseData);
-    }catch(err){
-console.log(err);
+  // Transform chartData to labels and counts
+  const transformChartData = () => {
+    if (!chartData || chartData.length === 0) {
+      return {
+        labels: [],
+        datasets: [],
+      };
     }
-  }
-useEffect(()=>{
-fetchdata();
-},[])
 
+    const labels = chartData.map((data) => data.title);
+    const counts = chartData.map((data) => data.count);
 
+    return {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Student Count',
+          data: counts,
+          backgroundColor: ['blue', 'green', 'orange', 'red', 'purple'], // Adjust colors as needed
+          borderColor: 'rgba(0, 0, 0, 0.1)',
+          borderWidth: 1,
+        },
+      ],
+    };
+  };
+
+  const barChartData = transformChartData();
+  const lineChartData = transformChartData();
+  const pieChartData = transformChartData();
+
+  // Ensure Chart.js scales are properly registered
+  chartjs.register(LinearScale);
 
   return (
-    <div id='analytics'>
-
-
-      <div id='bar' style={{  backgroundColor: "black",maxHeight:'300px' ,border:'1px solid black'}}>
-        <Bar data={chartdata} style={{width:"100%",padding:'1%'}} />
+    <div id="analytics">
+      <div id="bar" style={{ backgroundColor: 'black', maxHeight: '300px', border: '1px solid black' }}>
+        <Bar data={barChartData} options={{ scales: { y: { beginAtZero: true, precision: 0 } } }} style={{ width: '100%', padding: '1%' }} />
       </div>
 
-<div id='second' style={{display:'flex',marginTop:"3%",gap:"3%",justifyContent:'center',alignItems:"center"}}>
+      <div id="second" style={{ display: 'flex', marginTop: '3%', gap: '3%', justifyContent: 'center', alignItems: 'center' }}>
+        <div id="line" style={{ backgroundColor: 'black', width: '58%', border: '1px solid black' }}>
+          <Line data={lineChartData} options={{ scales: { y: { beginAtZero: true, precision: 0 } } }} />
+        </div>
 
-<div id='line' style={{ backgroundColor: "black",width:"58%",border:'1px solid black'}}>
-        <Line data={chartdata}  />
+        <div id="pie" style={{ width: '40%' }}>
+          <Pie data={pieChartData} />
+        </div>
       </div>
-
-      <div id='Pie' style={{width:"40%"}}>
-        <Pie data={chartdata}  />
-      </div>
-
-</div>
-     
-
-
     </div>
-  )
-}
+  );
+};
 
-export default Analytics
+export default Analytics;

@@ -22,7 +22,7 @@ import {
   LectureData_data_success,
   enrollmentData_data_success,
   createEnrollment_data_success,
-  logout
+  logout,chartData_data_success
 } from './ActionTypes';
 
 const baseURL = 'http://localhost:8080/api';
@@ -179,3 +179,38 @@ export const enrollCourse = (token, courseId) => async (dispatch) => {
 export const logout_success = () => ({
   type: logout
 });
+
+
+
+export const getOwnCourses = (token) => async (dispatch) => {
+  dispatch({ type: 'Get_data_loading' });
+  console.log('Getting own courses');
+  try {
+    const res = await axios.get(`${baseURL}/ownCourses`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    console.log('Own courses response:', res.data.populatedCourses);
+
+    // Extract _id from each course object and make individual API calls for course count
+    const coursePromises = res.data.populatedCourses.map(async (course) => {
+      const courseRes = await axios.get(`${baseURL}/coursecount`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params:{
+          courseId: course._id
+        }
+      });
+      return { ...course, count: courseRes.data.count };
+    });
+
+    // Wait for all promises to resolve
+    const coursesWithData = await Promise.all(coursePromises);
+
+    console.log('Courses with count:', coursesWithData);
+
+    // Dispatch success action with the courses including count
+    dispatch({ type:chartData_data_success, payload: coursesWithData });
+  } catch (error) {
+    handleApiError(dispatch, error, 'Get_data_error');
+  }
+};

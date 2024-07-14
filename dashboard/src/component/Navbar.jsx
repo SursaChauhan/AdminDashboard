@@ -4,7 +4,7 @@ import Search from './Search';
 import LoginRegister from './login';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-
+import logo from './Images/logo.png'
 const Navbar = () => {
   const IsLoggedIn = useSelector((state) => state.auth.IsLoggedIn); 
  
@@ -12,7 +12,7 @@ const Navbar = () => {
 
     <div style={{display:"flex",justifyContent:"space-around",alignItems:"center",width:"100%"}}>
         <div>
-        <img src="https://blackcoffer.com/wp-content/uploads/2023/10/Black-720x172-4.png" alt="logo" style={{width:"20%"}}/>
+        <img src={logo} alt="logo" style={{width:'80px'}}/>
 </div>
       <Search/>
     {IsLoggedIn ?<Profile/>: <LoginRegister/> }  

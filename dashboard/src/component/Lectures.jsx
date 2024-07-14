@@ -7,8 +7,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Stack,
-  Pagination,
   Card,
   CardContent,
 } from "@mui/material";
@@ -16,10 +14,9 @@ import { getEnrollData, getLecturesById } from "../redux/Action";
 
 const Lectures = () => {
   const [lectures, setLectures] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [selectedCourseId, setSelectedCourseId] = useState("");
 
-  const { loginData, enrollmentData, LectureData, totalPages, page } = useSelector(
+  const { loginData, enrollmentData, LectureData } = useSelector(
     (state) => state.auth
   );
   const dispatch = useDispatch();
@@ -31,9 +28,9 @@ const Lectures = () => {
 
   useEffect(() => {
     if (selectedCourseId) {
-      dispatch(getLecturesById(loginData.token, selectedCourseId, currentPage));
+      dispatch(getLecturesById(loginData.token, selectedCourseId));
     }
-  }, [dispatch, loginData.token, selectedCourseId, currentPage]);
+  }, [dispatch, loginData.token, selectedCourseId]);
 
   useEffect(() => {
     setLectures(LectureData);
@@ -41,11 +38,6 @@ const Lectures = () => {
 
   const handleCourseChange = (event) => {
     setSelectedCourseId(event.target.value);
-    setCurrentPage(1); // Reset to the first page when the course changes
-  };
-
-  const handlePageChange = (event, page) => {
-    setCurrentPage(page);
   };
 
   return (
@@ -92,25 +84,6 @@ const Lectures = () => {
           </Grid>
         ))}
       </Grid>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: "3%",
-        }}
-      >
-        <Stack spacing={2}>
-          <Pagination
-            count={totalPages}
-            variant="outlined"
-            shape="rounded"
-            page={currentPage}
-            onChange={handlePageChange}
-          />
-        </Stack>
-      </div>
     </div>
   );
 };
