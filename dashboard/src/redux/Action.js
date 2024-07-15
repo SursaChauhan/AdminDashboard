@@ -94,16 +94,8 @@ export const postCourse = (courseData, token) => async (dispatch) => {
 export const patchCourse = (token, courseId, courseData) => async (dispatch) => {
   dispatch({ type: Patch_data_loading });
   
-  // Create FormData
-  const formData = new FormData();
-  for (const key in courseData) {
-    formData.append(key, courseData[key]);
-  }
-
-  console.log([...formData]); // Log FormData contents
-
   try {
-    const res = await axios.patch(`${baseURL}/courses/${courseId}`, formData, {
+    const res = await axios.patch(`${baseURL}/courses/${courseId}`, courseData, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data'

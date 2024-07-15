@@ -86,7 +86,7 @@ import {
         return { ...state, isLoading: true, isError: false };
   
       case login_success:
-        console.log('Login successful:', payload);
+        console.log('Login successful:');
         return { ...state, IsLoggedIn: true, loginData: payload };
   
       case login_error:
