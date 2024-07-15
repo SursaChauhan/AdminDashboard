@@ -104,11 +104,20 @@ const Dashboard = () => {
   };
 
   const handleCourseUpdate = async (course) => {
+    console.log(course,file);
     const id = courseId;
     try {
       const { token } = loginData;
-      dispatch(patchCourse(token, id, course));
-      console.log("Updated course");
+      const formData = new FormData();
+      formData.append("title", course.title);
+      formData.append("description", course.description);
+      if (file) {
+        console.log("file", file.name);
+        formData.append("file", file); // Ensure the key matches your backend's expected field name
+      }
+      console.log("FormData before sending:");
+      dispatch(patchCourse(token, id, formData));
+      console.log("Updated course",formData);
     } catch (error) {
       console.error(error.message);
     }

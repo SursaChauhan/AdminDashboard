@@ -93,11 +93,20 @@ export const postCourse = (courseData, token) => async (dispatch) => {
 // Patch Course Action
 export const patchCourse = (token, courseId, courseData) => async (dispatch) => {
   dispatch({ type: Patch_data_loading });
+  
+  // Create FormData
+  const formData = new FormData();
+  for (const key in courseData) {
+    formData.append(key, courseData[key]);
+  }
+
+  console.log([...formData]); // Log FormData contents
+
   try {
-    const res = await axios.patch(`${baseURL}/courses/${courseId}`, courseData, {
+    const res = await axios.patch(`${baseURL}/courses/${courseId}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'multipart/form-data'
       }
     });
     dispatch({ type: Patch_data_success });
@@ -106,6 +115,7 @@ export const patchCourse = (token, courseId, courseData) => async (dispatch) => 
     handleApiError(dispatch, error, Patch_data_error);
   }
 };
+
 
 // Delete Course Action
 export const deleteCourse = (token, courseId) => async (dispatch) => {
